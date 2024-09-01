@@ -1,7 +1,7 @@
 const form = document.getElementById('myForm')
 
 form.addEventListener('submit', (event) => {
-    event.preventDefault(); // Empêche la soumission du formulaire
+    event.preventDefault();
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -25,7 +25,7 @@ form.addEventListener('submit', (event) => {
         // Traitez la réponse du backend
         if (data.token) {
         localStorage.setItem('token', data.token)
-            window.location.href = './index.html'; // Redirige vers la page d'accueil
+            window.location.href = './index.html';
         } else {
             alert('Échec de la connexion : ' + data.message);
         }

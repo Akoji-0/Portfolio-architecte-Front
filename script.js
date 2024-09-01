@@ -52,7 +52,7 @@ const catergoryId = [
 ];
 console.log(catergoryId);
 
-let test = [];
+let catergoryInput = [];
 
 function afficherImage() {
   const galleryContainer = document.querySelector(".gallery");
@@ -168,8 +168,8 @@ if (IsConneted) {
 
   // Ajout de cette fonction pour recharger les images après ajout
   function refreshContentAfterAdd() {
-    afficherImage(); // Rafraîchir la galerie sur la page principale
-    loadProjectsData(); // Rafraîchir les images dans la modale
+    afficherImage();
+    loadProjectsData(); 
   }
 
   // Fonction pour créer un conteneur d'image avec l'icône de suppression
@@ -267,7 +267,7 @@ if (IsConneted) {
     // Fonction pour afficher la deuxième modale
     addPhotoButton.addEventListener("click", function () {
       firstModal.style.display = "none";
-      secondModal.style.display = "flex"; // S'assure que la deuxième modale apparaît
+      secondModal.style.display = "flex";
     });
 
     // Fonction pour revenir à la première modale
@@ -300,15 +300,13 @@ if (IsConneted) {
         reader.onload = function (e) {
           // Mettre à jour la source de l'image et l'afficher
           imagePreview.src = e.target.result;
-          imagePreview.style.display = "block"; // Affiche l'image
+          imagePreview.style.display = "block";
 
-          // Masquer le contenu initial (icône, bouton et texte)
           uploadContent.style.display = "none";
 
-          // Adapter l'image aux dimensions du conteneur
           imagePreview.style.width = "100%";
           imagePreview.style.height = "100%";
-          imagePreview.style.objectFit = "contain"; // Permet de couvrir le conteneur sans déformation
+          imagePreview.style.objectFit = "contain"; 
         };
 
         // Lire le contenu du fichier sous forme d'URL
@@ -328,12 +326,11 @@ if (IsConneted) {
 
       // Parcourt les éléments du tableau existingFilters en excluant "Tous"
       catergoryId.forEach((category) => {
-        // Crée un nouvel élément <option>
         const option = document.createElement("option");
-        option.value = category; // Définit la valeur de l'option
-        option.textContent = category.name; // Définit le texte affiché
+        option.value = category; 
+        option.textContent = category.name; 
 
-        test = category.id;
+        catergoryInput = category.id;
 
         // Ajoute l'option au <select>
         categorySelect.appendChild(option);
@@ -371,13 +368,13 @@ if (IsConneted) {
 
     // Fonction de soumission du formulaire
     addPhotoForm.addEventListener("submit", function (event) {
-      event.preventDefault(); // Empêche le rechargement de la page lors de la soumission
+      event.preventDefault();
 
       // Récupération des valeurs du formulaire
       const formData = new FormData();
       formData.append("image", photoUploadInput.files[0]);
       formData.append("title", photoTitleInput.value);
-      formData.append("category", test);
+      formData.append("category", catergoryInput);
 
       // Affiche le contenu de formData pour déboguer
       console.log(photoUploadInput.files[0]);
