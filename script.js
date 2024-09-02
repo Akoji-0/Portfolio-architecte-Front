@@ -46,9 +46,9 @@ fetch("http://localhost:5678/api/works")
   });
 
 const catergoryId = [
-  { id: 0, name: "Objets" },
-  { id: 1, name: "Appartements" },
-  { id: 2, name: "Hotels & restaurants" },
+  { id: 1, name: "Objets" },
+  { id: 2, name: "Appartements" },
+  { id: 3, name: "Hotels & restaurants" },
 ];
 console.log(catergoryId);
 
@@ -169,7 +169,7 @@ if (IsConneted) {
   // Ajout de cette fonction pour recharger les images après ajout
   function refreshContentAfterAdd() {
     afficherImage();
-    loadProjectsData(); 
+    loadProjectsData();
   }
 
   // Fonction pour créer un conteneur d'image avec l'icône de suppression
@@ -204,35 +204,35 @@ if (IsConneted) {
 
   // Fonction pour gérer la suppression du projet
   function handleDeleteProject(projectId, imageWrapper) {
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      if (token) {
-        fetch(`http://localhost:5678/api/works/${projectId}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    if (token) {
+      fetch(`http://localhost:5678/api/works/${projectId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            imageWrapper.remove();
+
+            afficherImage();
+
+            alert("Projet supprimé avec succès.");
+          } else {
+            return response.text().then((text) => {
+              throw new Error(text);
+            });
+          }
         })
-          .then((response) => {
-            if (response.ok) {
-              imageWrapper.remove();
-
-              afficherImage();
-
-              alert("Projet supprimé avec succès.");
-            } else {
-              return response.text().then((text) => {
-                throw new Error(text);
-              });
-            }
-          })
-          .catch((error) => {
-            console.error("Erreur lors de la suppression du projet:", error);
-            alert(`Une erreur s'est produite : ${error.message}`);
-          });
-      } else {
-        alert("Vous devez être connecté pour supprimer un projet.");
-      }
+        .catch((error) => {
+          console.error("Erreur lors de la suppression du projet:", error);
+          alert(`Une erreur s'est produite : ${error.message}`);
+        });
+    } else {
+      alert("Vous devez être connecté pour supprimer un projet.");
+    }
   }
 
   // Fonction pour configurer l'événement de fermeture de la modale
@@ -286,9 +286,11 @@ if (IsConneted) {
     });
 
     // Prévisualisation de l'image
-    const photoUploadInput = document.getElementById("photo-upload");
+    const photoUploadInput = document.getElementById("photoUpload");
     const imagePreview = document.getElementById("image-preview");
     const uploadContent = document.getElementById("upload-content");
+
+    imagePreview.style.display = "none";
 
     // Fonction pour gérer l'affichage de la prévisualisation de l'image
     photoUploadInput.addEventListener("change", function (event) {
@@ -306,7 +308,7 @@ if (IsConneted) {
 
           imagePreview.style.width = "100%";
           imagePreview.style.height = "100%";
-          imagePreview.style.objectFit = "contain"; 
+          imagePreview.style.objectFit = "contain";
         };
 
         // Lire le contenu du fichier sous forme d'URL
@@ -315,22 +317,20 @@ if (IsConneted) {
     });
 
     // Sélection du menu déroulant par son id
-    const categorySelect = document.getElementById("photo-category");
+    const categorySelect = document.getElementById("photo-category"); // Référence correcte du select
 
     // Fonction pour ajouter dynamiquement les options au <select>
     function populateCategoryDropdown() {
       console.log("Fonction populateCategoryDropdown appelée");
 
-      // Efface toutes les options existantes (au cas où)
+      // Efface toutes les options existantes
       categorySelect.innerHTML = "";
 
-      // Parcourt les éléments du tableau existingFilters en excluant "Tous"
+      // Parcourt les éléments du tableau catergoryId
       catergoryId.forEach((category) => {
         const option = document.createElement("option");
-        option.value = category; 
-        option.textContent = category.name; 
-
-        catergoryInput = category.id;
+        option.value = category.id; // ID de la catégorie
+        option.textContent = category.name; // Nom de la catégorie
 
         // Ajoute l'option au <select>
         categorySelect.appendChild(option);
@@ -343,17 +343,17 @@ if (IsConneted) {
 
   document.addEventListener("DOMContentLoaded", function () {
     const addPhotoForm = document.getElementById("add-photo-form");
-    const photoUploadInput = document.getElementById("photo-upload");
+    const photoUploadInput = document.getElementById("photoUpload");
     const photoTitleInput = document.getElementById("photo-title");
-    const photoCategorySelect = document.getElementById("photo-category");
+    const selectElement = document.getElementById("photo-category");
     const submitButton = document.querySelector(".modal-submit");
 
-    // Fonction pour vérifier si tous les champs sont remplis
+    // Fonction pour vérifier si tous les champs sont remplis et valides
     function checkFormValidity() {
       const isFormValid =
         photoUploadInput.files.length > 0 &&
         photoTitleInput.value.trim() !== "" &&
-        photoCategorySelect.value.trim() !== "";
+        selectElement.value.trim() !== "";
 
       submitButton.disabled = !isFormValid;
     }
@@ -361,9 +361,9 @@ if (IsConneted) {
     // Vérification en temps réel si le formulaire est valide
     photoUploadInput.addEventListener("change", checkFormValidity);
     photoTitleInput.addEventListener("input", checkFormValidity);
-    photoCategorySelect.addEventListener("change", checkFormValidity);
+    selectElement.addEventListener("change", checkFormValidity);
 
-    // Désactiver le bouton par défaut
+    // Désactiver le bouton par défaut lors du chargement
     checkFormValidity();
 
     // Fonction de soumission du formulaire
@@ -374,10 +374,7 @@ if (IsConneted) {
       const formData = new FormData();
       formData.append("image", photoUploadInput.files[0]);
       formData.append("title", photoTitleInput.value);
-      formData.append("category", catergoryInput);
-
-      // Affiche le contenu de formData pour déboguer
-      console.log(photoUploadInput.files[0]);
+      formData.append("category", selectElement.value);
 
       // Récupère le token d'authentification depuis le localStorage
       const token = localStorage.getItem("token");
@@ -405,8 +402,8 @@ if (IsConneted) {
           // Réinitialiser le formulaire
           addPhotoForm.reset();
           checkFormValidity(); // Désactiver le bouton "Valider" après réinitialisation
-          document.getElementById("upload-content").style.display = "flex"; // Réafficher le contenu de téléchargement
-          document.getElementById("image-preview").style.display = "none"; // Masquer l'aperçu de l'image
+          document.getElementById("upload-content").style.display = "flex";
+          document.getElementById("image-preview").style.display = "none";
 
           // Rafraîchir la galerie et la modale
           refreshContentAfterAdd();

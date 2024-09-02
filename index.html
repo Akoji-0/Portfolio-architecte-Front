@@ -10,7 +10,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
 		rel="stylesheet">
 	<meta name="description" content="">
-	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./style.css">
 	<script src="https://kit.fontawesome.com/c5d662b80d.js" crossorigin="anonymous"></script>
 </head>
 
@@ -27,7 +27,7 @@
 		</nav>
 	</header>
 	<main>
-		<section id="introduction">
+		<div id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
 			</figure>
@@ -41,7 +41,7 @@
 				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
 					décorateur(trice)</p>
 			</article>
-		</section>
+		</div>
 		<section id="portfolio">
 			<h2>Mes Projets</h2>
 
@@ -104,19 +104,20 @@
 					<div class="form-group photo-upload-container">
 						<div class="upload-content" id="upload-content">
 							<i class="fa-regular fa-image fa-5x"></i>
-							<label for="photo-upload" class="upload-label">+ Ajouter une photo</label>
-							<input type="file" id="photo-upload" accept="image/*" required hidden>
+							<label for="photoUpload" class="photo-upload">+ Ajouter une photo</label>
+							<input type="file" id="photoUpload" accept="image/*" required hidden>
 							<p class="upload-text">PNG, JPG : 4Mo max</p>
 						</div>
-						<img id="image-preview" src="" alt="Aperçu de l'image" style="display:none;">
+						<img id="image-preview" src="#" alt="Aperçu de l'image">
 					</div>
 					<div class="form-group">
-						<label for="photo-title">Titre</label>
+						<div class="photo-title">Titre</div>
 						<input type="text" id="photo-title" placeholder="" required>
 					</div>
-					<div class="form-group border-gray">
+					<div class="form-group">
 						<label for="photo-category">Catégorie</label>
 						<select id="photo-category" required>
+							<option value=""></option>
 						</select>
 					</div>
 					<button type="submit" class="modal-submit modal-addPic">Valider</button>

@@ -388,23 +388,49 @@ footer nav ul {
     height: 180px;
     background-color: aliceblue;
     position: relative;
-    overflow: hidden; /* Assure que l'image ne déborde pas du conteneur */
+    overflow: hidden;
 }
 
 .upload-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.upload-content i {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+label.photo-upload {
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+label.photo-upload:hover {
+    background-color: #e0e0e0;
 }
 
 #image-preview {
+    max-width: 100%;
+    max-height: 300px;
     display: none;
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* L'image couvre l'espace du conteneur sans déformation */
-	max-width: 300px;  
-    height: auto;
+    margin-top: 10px;
+    object-fit: contain;
 }
+
+input[type="file"] {
+    display: none;
+}
+
 
 .upload-label {
     background-color: #b0b0b0;
@@ -438,15 +464,6 @@ footer nav ul {
     gap: 20px;
 }
 
-#photo-category {
-    height: 50px;
-    font-size: 1.2em;
-    border: none;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-    width: 100%;
-	font-family: 'Work Sans';
-}
-
 #add-photo-form {
     width: 100%;
     display: flex;
@@ -467,9 +484,19 @@ footer nav ul {
 select {
     padding: 10px;
     appearance: auto;
+    height: 50px;
+    font-size: 1.2em;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    width: 100%;
+    font-family: 'Work Sans';
+}
+
+div#selects {
+    width: 100%;
 }
 
 .modal-submit:disabled {
-	background-color: #ccc; /* Couleur de fond grisée */
-	cursor:default ;    /* Curseur indiquant que l'élément n'est pas cliquable */
+	background-color: #ccc;
+	cursor:default ;
   }
