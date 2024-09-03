@@ -1,10 +1,54 @@
-fetch("http://localhost:5678/api/works")
-  .then((response) => response.json())
-  .then((data) => {
-    function afficherImages(filtre) {
-      const galleryContainer = document.querySelector(".gallery");
-      galleryContainer.innerHTML = "";
+window.onload = function () {
+  let filterButtonsContainer = document.querySelector(".filter-buttons");
 
+  if (!filterButtonsContainer) {
+    filterButtonsContainer = document.createElement("div");
+    filterButtonsContainer.classList.add("filter-buttons");
+    document.body.appendChild(filterButtonsContainer);
+  }
+
+  fetch("http://localhost:5678/api/categories")
+    .then((response) => response.json())
+    .then((categories) => {
+
+      const galleryContainer = document.querySelector(".gallery");
+
+      function createFilterButton(categoryName) {
+        const button = document.createElement("button");
+        button.textContent = categoryName;
+        button.classList.add("filter-button");
+
+        button.addEventListener("click", () => {
+          afficherImages(categoryName);
+
+          document.querySelectorAll(".filter-button").forEach((btn) => {
+            btn.classList.remove("selected");
+          });
+
+          button.classList.add("selected");
+        });
+
+        return button;
+      }
+
+      filterButtonsContainer.appendChild(createFilterButton("Tous"));
+      categories.forEach((category) => {
+        filterButtonsContainer.appendChild(createFilterButton(category.name));
+      });
+
+      const firstButton = document.querySelector(".filter-button");
+      firstButton.classList.add("selected");
+      afficherImages("Tous");
+    });
+};
+
+function afficherImages(filtre) {
+  const galleryContainer = document.querySelector(".gallery");
+  galleryContainer.innerHTML = "";
+
+  fetch("http://localhost:5678/api/works")
+    .then((response) => response.json())
+    .then((data) => {
       data.forEach((item) => {
         if (filtre === "Tous" || item.category.name === filtre) {
           const figure = document.createElement("figure");
@@ -20,30 +64,8 @@ fetch("http://localhost:5678/api/works")
           galleryContainer.appendChild(figure);
         }
       });
-    }
-
-    const existingFilters = [
-      "Tous",
-      "Objets",
-      "Appartements",
-      "Hotels & restaurants",
-    ];
-
-    const filterButtons = document.querySelectorAll(".filter-button");
-
-    filterButtons.forEach((button, index) => {
-      button.textContent = existingFilters[index];
-      button.addEventListener("click", () => {
-        const selectedFilter = existingFilters[index];
-        afficherImages(selectedFilter);
-
-        filterButtons.forEach((btn) => btn.classList.remove("selected"));
-        button.classList.add("selected");
-      });
     });
-
-    filterButtons[0].classList.add("selected");
-  });
+}
 
 const catergoryId = [
   { id: 1, name: "Objets" },
@@ -329,8 +351,8 @@ if (IsConneted) {
       // Parcourt les éléments du tableau catergoryId
       catergoryId.forEach((category) => {
         const option = document.createElement("option");
-        option.value = category.id; // ID de la catégorie
-        option.textContent = category.name; // Nom de la catégorie
+        option.value = category.id;
+        option.textContent = category.name;
 
         // Ajoute l'option au <select>
         categorySelect.appendChild(option);
@@ -383,16 +405,16 @@ if (IsConneted) {
       fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`, // Ajout du token dans les en-têtes
+          Authorization: `Bearer ${token}`,
         },
-        body: formData, // Envoie des données multipart/form-data
+        body: formData,
       })
         .then((response) => {
           if (response.ok) {
-            return response.json(); // Transforme la réponse en JSON
+            return response.json();
           } else {
             return response.text().then((text) => {
-              throw new Error(text); // Lève une erreur avec le texte de la réponse
+              throw new Error(text);
             });
           }
         })
